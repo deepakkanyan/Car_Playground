@@ -1,4 +1,4 @@
-package com.carplayground.filesystem
+package com.carplayground.data.filesystem
 
 import android.content.Context
 import com.carplayground.MyApplication
@@ -12,19 +12,13 @@ import java.io.InputStreamReader
 
 object FetchDataFromFile {
 
-
-
-
-
-
-    suspend fun fetchAndSaveData(application: MyApplication){
-         val jsonString = fetchJsonFromFile(application)
-         val cars = Gson().fromJson(jsonString, Array<Car>::class.java).toList()
-         application.appDatabase.carDao().insertAll(cars)
+     fun fetchAndSaveData(context: Context) : List<Car>{
+         val jsonString = fetchJsonFromFile(context)
+        return Gson().fromJson(jsonString, Array<Car>::class.java).toList()
     }
 
 
-    fun fetchJsonFromFile(context: Context) : String{
+    private fun fetchJsonFromFile(context: Context) : String{
         val inputStream: InputStream = context.resources.openRawResource(R.raw.carsdata)
         val reader = BufferedReader(InputStreamReader(inputStream))
         val jsonString = StringBuilder()
