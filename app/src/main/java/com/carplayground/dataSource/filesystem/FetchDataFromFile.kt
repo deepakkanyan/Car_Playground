@@ -1,9 +1,8 @@
-package com.carplayground.data.filesystem
+package com.carplayground.dataSource.filesystem
 
 import android.content.Context
-import com.carplayground.MyApplication
 import com.carplayground.R
-import com.carplayground.room.Car
+import com.carplayground.room.tables.Car
 import com.google.gson.Gson
 import java.io.BufferedReader
 import java.io.IOException
@@ -12,7 +11,7 @@ import java.io.InputStreamReader
 
 object FetchDataFromFile {
 
-     fun fetchAndSaveData(context: Context) : List<Car>{
+     fun fetchAndSaveDataToLocalDb(context: Context) : List<Car>{
          val jsonString = fetchJsonFromFile(context)
         return Gson().fromJson(jsonString, Array<Car>::class.java).toList()
     }

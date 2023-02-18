@@ -1,4 +1,4 @@
-package com.carplayground.room
+package com.carplayground.room.tables
 
 import androidx.room.*
 

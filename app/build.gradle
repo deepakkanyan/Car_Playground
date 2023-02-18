@@ -47,7 +47,6 @@ dependencies {
 
     def navigation = '2.5.3'
     def room_version = "2.5.0"
-    def koin_version = "3.1.2"
 
     def composeBom =  platform('androidx.compose:compose-bom:2022.12.00')
     implementation composeBom

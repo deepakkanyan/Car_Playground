@@ -1,22 +1,14 @@
-package com.carplayground.room
+package com.carplayground.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.carplayground.room.tables.Car
 
 @Dao
 interface CarDao {
     @Insert
-    suspend fun insert(car: Car)
-    @Insert
     suspend fun insertAll(cars: List<Car>)
-
     @Query("SELECT * FROM cars")
     suspend fun getAllCars(): List<Car>
-
-    @Query("SELECT * FROM cars WHERE id = :id")
-    suspend fun getCarById(id: Int): Car?
-
-    @Query("DELETE FROM cars")
-    suspend fun deleteAll()
 }

@@ -2,7 +2,7 @@ package com.carplayground.di
 
 import android.content.Context
 import androidx.room.Room
-import com.carplayground.data.local.CarRepo
+import com.carplayground.dataSource.local.CarRepo
 import com.carplayground.room.CarDatabase
 import dagger.Module
 import dagger.Provides

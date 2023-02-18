@@ -4,84 +4,95 @@ package com.carplayground.ui.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Card
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import com.carplayground.room.Car
+import androidx.compose.ui.unit.sp
+import com.carplayground.R
+import com.carplayground.model.CarsInfoModel
 
 @Composable
-fun BoxWithDropdowns(carList: List<Car>, onSelectedFilter: (String)->Unit ) {
-    var selectedMake by remember { mutableStateOf("") }
-    var selectedModel by remember { mutableStateOf("") }
+fun BoxWithDropdowns(carList: List<CarsInfoModel>, onSelectedFilter: (String) -> Unit) {
+    var selectedMake by remember { mutableStateOf("Any Make") }
+    var selectedModel by remember { mutableStateOf("Any Model") }
 
-    var mExpanded1 by remember { mutableStateOf(false) }
-    var mExpanded2 by remember { mutableStateOf(false) }
+    var makeExpandableState by remember { mutableStateOf(false) }
+    var modelExpandableState by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(24.dp)
-            .background(Color.Gray)
+            .padding(16.dp)
     ) {
         Column(
             modifier = Modifier
-                .background(Color.Gray)
+                .background(Color.Gray,shape = RoundedCornerShape(5.dp))
                 .padding(16.dp)
-                .fillMaxWidth()
-                .padding(16.dp)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
         ) {
-            Text(text = "Filter")
-            Spacer(modifier = Modifier.height(20.dp))
+            Text(text = stringResource(R.string.filters), style = TextStyle(color = Color.White, fontSize = 16.sp))
+            Spacer(modifier = Modifier.height(10.dp))
             Card(
                 Modifier
-                    .clickable(onClick = { mExpanded1 = true })
+                    .clickable(onClick = { makeExpandableState = true })
                     .fillMaxWidth()
-                    .height(40.dp)) {
-                Text(text = selectedMake,Modifier.align(Alignment.Start).height(40.dp))
+                    .height(40.dp),
+                shape = RoundedCornerShape(5.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
+            ) {
+                Text(
+                    text = selectedMake,
+                    Modifier.padding(8.dp).align(Alignment.Start).height(40.dp)
+                )
                 DropdownMenu(
-                    expanded = mExpanded1,
-                    onDismissRequest = { mExpanded1 = false },
+                    expanded = makeExpandableState,
+                    onDismissRequest = { makeExpandableState = false },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    carList.map { it.make }.forEach  {
-                        DropdownMenuItem(text = {  Text(text = it) }, onClick = {
+                    carList.map { it.carInfo.make }.forEachIndexed() { index , it ->
+                        DropdownMenuItem(text = { Text(text = it) }, onClick = {
                             selectedMake = it
-                            mExpanded1 = false
+                            onSelectedFilter.invoke(carList[index].carInfo.model)
+                            selectedModel = "Any Model"
+                            makeExpandableState = false
                         })
                     }
                 }
             }
 
             Spacer(modifier = Modifier.height(20.dp))
-
-
             Card(
                 Modifier
                     .fillMaxWidth()
-                    .clickable(onClick = { mExpanded2 = true })
-                    .height(40.dp)) {
-
-              DropdownMenu(
-                    expanded = mExpanded2,
-                    onDismissRequest = {mExpanded2 = false },
+                    .clickable(onClick = { modelExpandableState = true })
+                    .height(40.dp),
+                shape = RoundedCornerShape(5.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
+            ) {
+                DropdownMenu(
+                    expanded = modelExpandableState,
+                    onDismissRequest = { modelExpandableState = false },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                  carList.filter { it.make == selectedMake }.forEach  {
-                        DropdownMenuItem(text = {  Text(text =  it.model) }, onClick = {
-                            selectedModel = it.model
-                            mExpanded2 = false
+                    carList.filter { it.carInfo.make == selectedMake }.forEach {
+                        DropdownMenuItem(text = { Text(text = it.carInfo.model) }, onClick = {
+                            selectedModel = it.carInfo.model
+                            modelExpandableState = false
                             onSelectedFilter.invoke(selectedModel)
                         })
                     }
                 }
-                Text(text = selectedModel,Modifier.align(Alignment.Start).height(40.dp), textAlign = TextAlign.Center)
+                Text(
+                    text = selectedModel,
+                    Modifier.padding(8.dp).align(Alignment.Start).height(40.dp)
+                )
 
             }
         }
