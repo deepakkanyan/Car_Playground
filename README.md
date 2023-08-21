@@ -1,5 +1,3 @@
-# README
-
 ## Android Car Playground
 
 Welcome to the Car Playground Android application repository. This application is built using modern Android development techniques with an emphasis on maintainability and scalability.
